@@ -1,1 +1,13 @@
-<p>auth works!</p>
+<mat-card>
+  <form [formGroup]="form" (ngSubmit)="login()" fxLayout="column" fxLayoutAlign="center center">
+    <mat-form-field>
+      <input matInput type="email" [formControlName]="'email'" placeholder="email ID">
+      <mat-error *ngIf="">Please enter a valid email ID</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="password" [formControlName]="'password'" placeholder="Password">
+      <mat-error *ngIf="">Password is too short</mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" [disabled] = "!form.valid">Login</button>
+  </form>
+</mat-card>
