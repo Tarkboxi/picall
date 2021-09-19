@@ -12,7 +12,7 @@ import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
-import { UploaderComponent } from './components/uploader/uploader.component';
+import { PhotoUploaderComponent } from './components/photo-uploader/photo-uploader.component';
 import { PhotoComponent } from './components/photo/photo.component';
 import { PhotoGridComponent } from './components/photo-grid/photo-grid.component';
 
@@ -23,7 +23,7 @@ import { PhotoGridComponent } from './components/photo-grid/photo-grid.component
     AuthComponent,
     HomeComponent,
     HeaderComponent,
-    UploaderComponent,
+    PhotoUploaderComponent,
     PhotoComponent,
     PhotoGridComponent,
   ],
