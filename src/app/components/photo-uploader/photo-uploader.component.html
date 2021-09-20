@@ -1,1 +1,16 @@
-<p>uploader works!</p>
+<mat-card class="photo-card" fxLayout="column" fxLayoutAlign="center center">
+    <form [formGroup]="form" (ngSubmit)="upload()">
+      <mat-form-field>
+        <input matInput type="text" [formControlName]="'title'" placeholder="Title">
+        <mat-error *ngIf="">Exceeded character length</mat-error>
+      </mat-form-field>
+      <div *ngIf = "form.get('photo').valid">
+        <img [src]="photoPreview">
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <button type = "button" (click)="filePicker.click()" mat-fab color="primary"><mat-icon>add_a_photo</mat-icon></button>
+        <input type ="file" #filePicker (change)="photoSelected($event)">
+      </div>
+      <button mat-raised-button color="primary" [disabled] = "!form.valid" type="submit">Upload</button>
+    </form>
+</mat-card>
