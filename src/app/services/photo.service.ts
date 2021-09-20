@@ -16,8 +16,11 @@ export class PhotoService {
     return this.photosUpdated.asObservable();
   }
 
-  addPhoto(data:FormData) {
-    this.httpClient.post('http://localhost:3000/api/photos', data).subscribe((data)=>{
+  addPhoto(title, photo) {
+    let postData = new FormData();
+    postData.append("title", title);
+    postData.append("photo", photo);
+    this.httpClient.post('http://localhost:3000/api/photos', postData).subscribe((data)=>{
       return data;
      });
   }

@@ -31,7 +31,7 @@ export class PhotoUploaderComponent {
   }
 
   upload() {
-    this.photoService.addPhoto(this.form.value);
+    this.photoService.addPhoto(this.form.value.title, this.form.value.photo);
   }
 
 }
