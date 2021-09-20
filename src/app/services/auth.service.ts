@@ -9,10 +9,9 @@ import { Auth } from 'src/app/models/Auth.model';
 })
 export class AuthService {
   private authStatusListener = new Subject<boolean>();
-  private authStatus: boolean;
+  private authStatus: boolean = false;
 
   constructor(private http: HttpClient, private router: Router) {
-    this.authStatus = false;
   }
 
   login(data: Auth) {
@@ -51,7 +50,7 @@ export class AuthService {
   }
 
   getToken() {
-    return localStorage.getItem('token');
+    return localStorage.getItem('token') || "";
   }
 
 }
