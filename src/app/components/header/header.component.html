@@ -1,1 +1,13 @@
-<p>header works!</p>
+<mat-toolbar color = "primary">
+  <span>PicAll</span>
+  <span class="right-float-spacer"></span>
+  <button mat-fab [matMenuTriggerFor]="menu">
+    <mat-icon>face</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)= "logout()">
+    <span>Logout</span>
+  </button>
+</mat-menu>

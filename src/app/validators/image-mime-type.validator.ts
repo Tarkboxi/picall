@@ -1,6 +1,6 @@
 import { AbstractControl } from "@angular/forms";
 import { Observable, Observer } from "rxjs";
-import * as concat from 'lodash/concat';
+import { concat } from 'lodash-es';
 
 export const imageMimeType = (control: AbstractControl): Promise<{[key: string]: any}> | Observable<{[key: string]: any}> => {
   const JPEG_MIME_TYPE = ["ffd8ffe8", "ffd8ffe0", "ffd8ffe1", "ffd8ffe2", "ffd8ffe3"];

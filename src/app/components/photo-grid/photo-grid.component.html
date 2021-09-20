@@ -1,5 +1,17 @@
+<mat-expansion-panel [expanded] = "selectedPhotos.length > 0" color="primary">
+  <span>{{selectedPhotos.length}} Photos selected</span>
+  <button mat-fab (click) = "delete()">
+    <mat-icon>delete outline icon</mat-icon>
+  </button>
+</mat-expansion-panel>
+
 <div *ngIf="photoDisplayer">
-  <div *ngFor="let photo of photoDisplayer.photos;">
-    <app-photo [photo]="photo"></app-photo>
-  </div>
+  <section>
+    <div fxLayout="row wrap" fxLayoutGap="4px grid">
+      <div fxFlex="300px" fxFlex.xs="100%" *ngFor="let photo of photoDisplayer.photos">
+        <app-photo [photo]="photo"></app-photo>
+        <mat-checkbox (change)="($event.checked) ? selectPhoto(photo.id) : deselectPhoto(photo.id)"></mat-checkbox>
+      </div>
+    </div>
+  </section>
 </div>

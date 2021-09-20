@@ -1,10 +1,8 @@
-<mat-card class="example-card">
-  <mat-card-header>
-    <mat-card-title>{{photo.title}}</mat-card-title>
-  </mat-card-header>
-  <img mat-card-image [src]="photo.url" alt="Failed to Load">
-  <mat-card-content>
-  </mat-card-content>
+<mat-card class="mat-elevation-z1 photo-card">
+  <img [src]="photo.url" alt="Failed to Load">
   <mat-card-actions>
+    <button mat-fab class="bottom-right" (click)="like()">
+      <mat-icon>favorite_border</mat-icon>
+    </button>
   </mat-card-actions>
 </mat-card>
