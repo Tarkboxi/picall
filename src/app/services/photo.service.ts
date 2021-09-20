@@ -1,27 +1,38 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Photo } from '../models/Photo.model';
+import { PhotoDisplayer } from '../models/photo-displayer.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoService {
-  private photos: Photo[] = [];
-  private photosUpdated = new Subject<Photo[]>();
+  private photoDisplay: PhotoDisplayer = {photos: [], total: 0};
+  private photosUpdated = new Subject<PhotoDisplayer>();
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
-  getPhotoUpdateListener() {
+  get PhotoUpdateListener() {
     return this.photosUpdated.asObservable();
   }
 
-  addPhoto(title, photo) {
+  addPhotos(title, photo) {
     let postData = new FormData();
     postData.append("title", title);
     postData.append("photo", photo);
     this.httpClient.post('http://localhost:3000/api/photos', postData).subscribe((data)=>{
       return data;
-     });
+    });
   }
+
+  getPhotos(count: number, page: number) {
+    const queryParams = `?pagesize=${count}&page=${page}`;
+    this.httpClient.get<PhotoDisplayer>("http://localhost:3000/api/photos" + queryParams).subscribe((data)=> {
+      this.photoDisplay.photos = data.photos;
+      this.photoDisplay.total = data.total;
+      this.photosUpdated.next(this.photoDisplay);
+    });
+  }
+
 }

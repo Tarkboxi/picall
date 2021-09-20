@@ -1,1 +1,5 @@
-<p>photo-grid works!</p>
+<div *ngIf="photoDisplayer">
+  <div *ngFor="let photo of photoDisplayer.photos;">
+    <app-photo [photo]="photo"></app-photo>
+  </div>
+</div>

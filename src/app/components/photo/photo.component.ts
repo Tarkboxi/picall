@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Photo } from 'src/app/models/Photo.model';
 
 @Component({
   selector: 'app-photo',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./photo.component.scss']
 })
 export class PhotoComponent implements OnInit {
-
+  @Input() photo: Photo;
   constructor() { }
 
   ngOnInit(): void {
