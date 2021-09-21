@@ -1,4 +1,4 @@
-import { HttpClient, HttpBackend } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { PhotoDisplayer } from '../models/photo-displayer.model';
@@ -12,20 +12,17 @@ import * as fileSaver from 'file-saver';
 export class PhotoService {
   private photoDisplay: PhotoDisplayer = {photos: [], total: 0};
   private photosUpdated = new Subject<PhotoDisplayer>();
-  private httpBackend;
 
-  constructor(private httpClient: HttpClient, httpBackend: HttpBackend) {
-    this.httpBackend = new HttpClient(httpBackend);
+  constructor(private httpClient: HttpClient) {
   }
 
   get PhotoUpdateListener() {
     return this.photosUpdated.asObservable();
   }
 
-  addPhotos(title, photo) {
+  addPhotos(photos) {
     let postData = new FormData();
-    postData.append("title", title);
-    postData.append("photo", photo);
+    postData.append("photos", photos);
     this.httpClient.post<any>('http://localhost:3000/api/photos', postData)
     .pipe( map(data => {
       return { photos: data.photos.map(photo => {
@@ -75,9 +72,6 @@ export class PhotoService {
       this.photoDisplay.total -= deletedPhotos.length;
       this.photosUpdated.next(this.photoDisplay);
     });
-  }
-
-  likePhoto(id) {
   }
 
   downloadPhoto(url) {

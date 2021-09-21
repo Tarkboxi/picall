@@ -16,10 +16,6 @@ export class PhotoComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  like() {
-    this.photoService.likePhoto(this.photo.id);
-  }
-
   openDialog() {
     this.dialog.open(PhotoViewerComponent, { data: this.photo} );
   }

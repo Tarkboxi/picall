@@ -23,7 +23,18 @@ export class AuthService {
         this.saveAuthData(token);
         this.router.navigate(['/home']);
       }
-    })
+    });
+  }
+
+  signUp(data: Auth) {
+    this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/login", data).subscribe(response=> {
+      const token = response.token;
+      if(token) {
+        this.authStatusListener.next(true);
+        this.saveAuthData(token);
+        this.router.navigate(['/home']);
+      }
+    });
   }
 
   logout() {

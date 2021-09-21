@@ -18,6 +18,8 @@ import { PhotoUploaderComponent } from './components/photo-uploader/photo-upload
 import { PhotoComponent } from './components/photo/photo.component';
 import { PhotoGridComponent } from './components/photo-grid/photo-grid.component';
 import { PhotoViewerComponent } from './components/photo/photo-viewer/photo-viewer.component';
+import { SignupComponent } from './components/signup/signup.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 @NgModule({
@@ -30,6 +32,8 @@ import { PhotoViewerComponent } from './components/photo/photo-viewer/photo-view
     PhotoComponent,
     PhotoGridComponent,
     PhotoViewerComponent,
+    SignupComponent,
+    LoginComponent,
   ],
   entryComponents: [PhotoViewerComponent],
   imports: [

@@ -1,13 +1,19 @@
-<mat-card>
-  <form [formGroup]="form" (ngSubmit)="login()" fxLayout="column" fxLayoutAlign="center center">
-    <mat-form-field>
-      <input matInput type="email" [formControlName]="'email'" placeholder="email ID">
-      <mat-error *ngIf="">Please enter a valid email ID</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="password" [formControlName]="'password'" placeholder="Password">
-      <mat-error *ngIf="">Password is too short</mat-error>
-    </mat-form-field>
-    <button mat-raised-button color="primary" [disabled] = "!form.valid">Login</button>
-  </form>
-</mat-card>
+<div fxFill fxLayout="column" fxLayoutAlign="center center">
+  <div fxLayout="row">
+    <mat-toolbar color = "primary" class="mat-display-1 tg-no-margin" fxFlex="400px">
+      PicAll
+    </mat-toolbar>
+  </div>
+  <div fxLayout="row">
+    <mat-card fxFlex="400px" color="accent">
+      <mat-tab-group animationDuration="0" mat-align-tabs="center">
+        <mat-tab label="Login">
+          <app-login></app-login>
+        </mat-tab>
+        <mat-tab label="Sign up">
+          <app-signup></app-signup>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>
