@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { PhotoDisplayer } from '../models/photo-displayer.model';
 import { map } from 'rxjs/operators'
-import { concat } from 'lodash-es';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +34,8 @@ export class PhotoService {
       return { photos: data.photos.map(photo => {
         return {
           url: photo.url,
-          id: photo._id
+          id: photo._id,
+          creator: photo.creator
         };
       }),
       total: data.total
