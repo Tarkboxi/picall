@@ -1,5 +1,6 @@
 export interface Photo {
   title: string;
   url: string;
-  userId: string;
+  creator: string;
+  id: string;
 }

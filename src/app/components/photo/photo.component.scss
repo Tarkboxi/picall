@@ -1,0 +1,13 @@
+.photo-card {
+  height: 300px;
+}
+.photo-card > img {
+  width: 100%;
+  max-height: 90%;
+  object-fit: contain;
+}
+.bottom-right {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
