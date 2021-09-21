@@ -8,9 +8,11 @@
 <div *ngIf="photoDisplayer">
   <section>
     <div fxLayout="row wrap" fxLayoutGap="4px grid">
-      <div fxFlex="300px" fxFlex.xs="100%" *ngFor="let photo of photoDisplayer.photos">
-        <app-photo [photo]="photo"></app-photo>
-        <mat-checkbox (change)="($event.checked) ? selectPhoto(photo.id) : deselectPhoto(photo.id)"></mat-checkbox>
+      <div fxFlex="400px" fxFlex.xs="100%" *ngFor="let photo of photoDisplayer.photos">
+        <mat-card class="mat-elevation-z1 photo-card">
+          <app-photo [photo]="photo"></app-photo>
+          <mat-checkbox (change)="($event.checked) ? selectPhoto(photo.id) : deselectPhoto(photo.id)"></mat-checkbox>
+        </mat-card>
       </div>
     </div>
   </section>

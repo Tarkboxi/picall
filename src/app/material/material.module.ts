@@ -9,8 +9,10 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
 
-const MaterialComponents = [MatButtonModule, MatIconModule, MatFormFieldModule, MatCardModule, MatInputModule, MatToolbarModule, MatMenuModule, MatCheckboxModule, MatSnackBarModule, MatExpansionModule];
+
+const MaterialComponents = [MatButtonModule, MatIconModule, MatFormFieldModule, MatCardModule, MatInputModule, MatToolbarModule, MatMenuModule, MatCheckboxModule, MatSnackBarModule, MatExpansionModule, MatDialogModule];
 
 @NgModule({
   imports: [

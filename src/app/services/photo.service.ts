@@ -1,8 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { PhotoDisplayer } from '../models/photo-displayer.model';
-import { map } from 'rxjs/operators'
+import { map } from 'rxjs/operators';
+import { concat } from 'lodash-es';
+import * as fileSaver from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,10 @@ import { map } from 'rxjs/operators'
 export class PhotoService {
   private photoDisplay: PhotoDisplayer = {photos: [], total: 0};
   private photosUpdated = new Subject<PhotoDisplayer>();
+  private httpBackend;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, httpBackend: HttpBackend) {
+    this.httpBackend = new HttpClient(httpBackend);
   }
 
   get PhotoUpdateListener() {
@@ -22,8 +26,22 @@ export class PhotoService {
     let postData = new FormData();
     postData.append("title", title);
     postData.append("photo", photo);
-    this.httpClient.post('http://localhost:3000/api/photos', postData).subscribe((data)=>{
-      return data;
+    this.httpClient.post<any>('http://localhost:3000/api/photos', postData)
+    .pipe( map(data => {
+      return { photos: data.photos.map(photo => {
+        return {
+          url: photo.url,
+          id: photo._id,
+          creator: photo.creator
+        };
+      }),
+      additions: data.total
+      };
+    }))
+    .subscribe((mappedData)=> {
+      this.photoDisplay.photos = concat(this.photoDisplay.photos, mappedData.photos);
+      this.photoDisplay.total += mappedData.additions;
+      this.photosUpdated.next(this.photoDisplay);
     });
   }
 
@@ -42,7 +60,6 @@ export class PhotoService {
       };
     }))
     .subscribe((mappedData)=> {
-      console.log(mappedData);
       this.photoDisplay.photos = mappedData.photos;
       this.photoDisplay.total = mappedData.total;
       this.photosUpdated.next(this.photoDisplay);
@@ -50,7 +67,6 @@ export class PhotoService {
   }
 
   deletePhotos(selectedPhotos: string[]) {
-    console.log(selectedPhotos);
     this.httpClient.request<any>('delete', "http://localhost:3000/api/photos", { body: selectedPhotos }).subscribe((response)=> {
       let deletedPhotos = response.photos;
       this.photoDisplay.photos = this.photoDisplay.photos.filter( function( photo ) {
@@ -63,4 +79,9 @@ export class PhotoService {
 
   likePhoto(id) {
   }
+
+  downloadPhoto(url) {
+    fileSaver.saveAs(url, url.split('/').pop());
+  }
+
 }

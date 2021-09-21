@@ -52,4 +52,8 @@ export class PhotoGridComponent implements OnInit {
     this.photosSubscription.unsubscribe();
   }
 
+  download() {
+    this.photoService.downloadPhoto("http://localhost:3000/photos/jewel1.jpeg-1632224634321.jpg");
+  }
+
 }

@@ -17,6 +17,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { PhotoUploaderComponent } from './components/photo-uploader/photo-uploader.component';
 import { PhotoComponent } from './components/photo/photo.component';
 import { PhotoGridComponent } from './components/photo-grid/photo-grid.component';
+import { PhotoViewerComponent } from './components/photo/photo-viewer/photo-viewer.component';
 
 
 @NgModule({
@@ -28,7 +29,9 @@ import { PhotoGridComponent } from './components/photo-grid/photo-grid.component
     PhotoUploaderComponent,
     PhotoComponent,
     PhotoGridComponent,
+    PhotoViewerComponent,
   ],
+  entryComponents: [PhotoViewerComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
