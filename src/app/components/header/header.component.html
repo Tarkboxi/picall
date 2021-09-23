@@ -1,10 +1,17 @@
-<mat-toolbar color = "primary">
-  <span class="mat-display-2 no-margin-bottom">PicAll</span>
-  <app-photo-uploader></app-photo-uploader>
-  <button mat-fab [matMenuTriggerFor]="menu">
-    <mat-icon>face</mat-icon>
-  </button>
-</mat-toolbar>
+<mat-toolbar color = "primary" fxLayout="row" fxLayoutAlign="space-between center" class="app-header-height">
+  <div>
+    <span class="mat-display-3 no-margin-bottom">PicAll</span>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
+    <app-photo-uploader></app-photo-uploader>
+
+    <button mat-fab [matMenuTriggerFor]="menu">
+      <mat-icon>face</mat-icon>
+    </button>
+  </div>
+
+  </mat-toolbar>
 
 <mat-menu #menu="matMenu">
   <button mat-menu-item (click)= "logout()">

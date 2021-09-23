@@ -1,9 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { PhotoDisplayer } from '../models/photo-displayer.model';
 import { map } from 'rxjs/operators';
 import { concat } from 'lodash-es';
+import { forEach } from 'lodash-es';
+import { difference } from 'lodash-es';
+import { includes } from 'lodash-es';
+import { filter } from 'lodash-es';
+import { map as _map } from 'lodash-es'
+
 import * as fileSaver from 'file-saver';
 
 @Injectable({
@@ -21,23 +27,31 @@ export class PhotoService {
   }
 
   addPhotos(photos) {
-    let postData = new FormData();
-    postData.append("photos", photos);
-    this.httpClient.post<any>('http://localhost:3000/api/photos', postData)
-    .pipe( map(data => {
-      return { photos: data.photos.map(photo => {
-        return {
-          url: photo.url,
-          id: photo._id,
-          creator: photo.creator
+    const uploads = [];
+    forEach(photos, (photo) => {
+      let postData = new FormData();
+      postData.append("photo", photo);
+      let upload = this.httpClient.post<any>('http://localhost:3000/api/photos', postData)
+      .pipe( map(data => {
+        return { photos: data.photos.map(photo => {
+          return {
+            url: photo.url,
+            id: photo._id,
+            creator: photo.creator
+          };
+        }),
+        additions: data.total
         };
-      }),
-      additions: data.total
-      };
-    }))
-    .subscribe((mappedData)=> {
-      this.photoDisplay.photos = concat(this.photoDisplay.photos, mappedData.photos);
-      this.photoDisplay.total += mappedData.additions;
+      }))
+      uploads.push(upload);
+    });
+    forkJoin(uploads).subscribe((forkedResponse)=> {
+      forEach(forkedResponse, (mappedData) => {
+        console.log(mappedData);
+        this.photoDisplay.photos = concat(this.photoDisplay.photos, mappedData.photos);
+      });
+      console.log(this.photoDisplay.photos);
+      this.photoDisplay.total += forkedResponse.length;
       this.photosUpdated.next(this.photoDisplay);
     });
   }
@@ -63,14 +77,15 @@ export class PhotoService {
     });
   }
 
-  deletePhotos(selectedPhotos: string[]) {
-    this.httpClient.request<any>('delete', "http://localhost:3000/api/photos", { body: selectedPhotos }).subscribe((response)=> {
-      let deletedPhotos = response.photos;
-      this.photoDisplay.photos = this.photoDisplay.photos.filter( function( photo ) {
-        return !(deletedPhotos.includes(photo.id));
+  deletePhotos = (selectedPhotos: string[]) => {
+    return new Promise(resolve => {
+      this.httpClient.request<any>('delete', "http://localhost:3000/api/photos", { body: selectedPhotos }).subscribe((response)=> {
+        let deletedPhotos = _map(response.photos, "id");
+        this.photoDisplay.photos = filter(this.photoDisplay.photos, (photo) => { return !includes(deletedPhotos, photo.id)});
+        this.photoDisplay.total -= deletedPhotos.length;
+        this.photosUpdated.next(this.photoDisplay);
+        resolve(deletedPhotos);
       });
-      this.photoDisplay.total -= deletedPhotos.length;
-      this.photosUpdated.next(this.photoDisplay);
     });
   }
 

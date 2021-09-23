@@ -1,4 +1,4 @@
 <form [formGroup]="form">
   <button type = "button" (click)="filePicker.click()" mat-fab color="accent"><mat-icon>add_a_photo</mat-icon></button>
-    <input type ="file" #filePicker (change)="photoSelected($event)">
+    <input type ="file" #filePicker (change)="photoSelected($event)" multiple>
 </form>
