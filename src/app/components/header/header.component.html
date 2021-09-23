@@ -1,4 +1,9 @@
 <mat-toolbar color = "primary" fxLayout="row" fxLayoutAlign="space-between center" class="app-header-height">
+
+  <div>
+    <mat-spinner color="accent" diameter = "50" *ngIf="loading"></mat-spinner>
+  </div>
+
   <div>
     <span class="mat-display-3 no-margin-bottom">PicAll</span>
   </div>
