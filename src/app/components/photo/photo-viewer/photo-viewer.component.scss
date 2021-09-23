@@ -1,0 +1,11 @@
+.photo-viewer {
+  height: 100%;
+}
+.photo-preview {
+  max-height: 100%;
+}
+.photo-frame {
+  height: calc(100% - 76px);
+  max-height: calc(100% - 76px);
+  overflow: hidden;
+}

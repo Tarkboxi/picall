@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Photo } from 'src/app/models/Photo.model';
-import { PhotoService } from 'src/app/services/photo.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PhotoViewerComponent } from './photo-viewer/photo-viewer.component';
+
 
 @Component({
   selector: 'app-photo',
@@ -11,13 +11,15 @@ import { PhotoViewerComponent } from './photo-viewer/photo-viewer.component';
 })
 export class PhotoComponent implements OnInit {
   @Input() photo: Photo;
-  constructor(private photoService: PhotoService, public dialog: MatDialog) { }
+
+  constructor(public dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
   }
 
   openDialog() {
-    this.dialog.open(PhotoViewerComponent, { data: this.photo} );
+    this.dialog.open(PhotoViewerComponent, { data: this.photo, autoFocus: false, height: "90vh", width: "100vw" } );
   }
 
 }
