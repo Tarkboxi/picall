@@ -13,6 +13,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 
 import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -22,6 +23,7 @@ import { PhotoGridComponent } from './components/photo-grid/photo-grid.component
 import { PhotoViewerComponent } from './components/photo/photo-viewer/photo-viewer.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login.component';
+import { PageTrackerComponent } from './components/page-tracker/page-tracker.component';
 
 
 @NgModule({
@@ -36,6 +38,7 @@ import { LoginComponent } from './components/login/login.component';
     PhotoViewerComponent,
     SignupComponent,
     LoginComponent,
+    PageTrackerComponent,
   ],
   entryComponents: [PhotoViewerComponent],
   imports: [
@@ -48,6 +51,7 @@ import { LoginComponent } from './components/login/login.component';
     ReactiveFormsModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+              {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
               { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService],
   bootstrap: [AppComponent]
 })

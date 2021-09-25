@@ -6,8 +6,9 @@ import { AuthGuard } from './guards/auth.guard';
 import { LocknavGuard } from './guards/locknav.guard';
 
 const routes: Routes = [
-  { path: 'login', component: AuthComponent},
-  { path: 'home', component: HomeComponent},
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+  { path: 'login', component: AuthComponent, canActivate: [LocknavGuard]},
+  { path: '', component: HomeComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
