@@ -9,8 +9,14 @@
             fxFlex.lt-sm="100%"
             *ngFor="let photo of photoDisplayer.photos">
           <mat-card class="mat-elevation-z1 photo-card">
-            <mat-checkbox (change)="($event.checked) ? selectPhoto(photo) : deselectPhoto(photo)"></mat-checkbox>
-            <app-photo [photo]="photo"></app-photo>
+            <mat-card-header>
+              <div mat-card-avatar>
+                <mat-checkbox (change)="($event.checked) ? selectPhoto(photo) : deselectPhoto(photo)" *ngIf="userId === photo.creator"></mat-checkbox>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              <app-photo [photo]="photo"></app-photo>
+            </mat-card-content>
           </mat-card>
         </div>
     </div>

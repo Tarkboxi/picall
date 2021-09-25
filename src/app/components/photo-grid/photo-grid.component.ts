@@ -7,6 +7,7 @@ import { pull } from 'lodash-es';
 import { pullAll } from 'lodash-es';
 import { includes } from 'lodash-es';
 import { filter } from 'lodash-es';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-photo-grid',
@@ -18,9 +19,11 @@ export class PhotoGridComponent implements OnInit {
   photoDisplayer: PhotoDisplayer;
   selectedPhotos: string[];
   pageEvent: PageEvent;
+  userId: string;
 
-  constructor(private photoService: PhotoService) {
+  constructor(private photoService: PhotoService, private authService: AuthService) {
     this.selectedPhotos = [];
+    this.userId = authService.getUserId();
   }
 
   ngOnInit(): void {
