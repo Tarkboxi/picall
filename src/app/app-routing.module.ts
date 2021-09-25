@@ -6,8 +6,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { LocknavGuard } from './guards/locknav.guard';
 
 const routes: Routes = [
-  { path: '', component: AuthComponent},
-  { path: 'home', component: HomeComponent}
+  { path: 'login', component: AuthComponent},
+  { path: 'home', component: HomeComponent},
 ];
 
 @NgModule({

@@ -6,12 +6,12 @@
   </div>
   <div fxLayout="row">
     <mat-card fxFlex="400px" color="accent">
-      <mat-tab-group animationDuration="0" mat-align-tabs="center">
+      <mat-tab-group animationDuration="0" #authTabGroup mat-align-tabs="center">
         <mat-tab label="Login">
           <app-login></app-login>
         </mat-tab>
         <mat-tab label="Sign up">
-          <app-signup></app-signup>
+          <app-signup [authTabGroup] = authTabGroup></app-signup>
         </mat-tab>
       </mat-tab-group>
     </mat-card>

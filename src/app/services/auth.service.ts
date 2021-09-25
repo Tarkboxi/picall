@@ -27,20 +27,17 @@ export class AuthService {
   }
 
   signUp(data: Auth) {
-    this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/login", data).subscribe(response=> {
-      const token = response.token;
-      if(token) {
-        this.authStatusListener.next(true);
-        this.saveAuthData(token);
-        this.router.navigate(['/home']);
-      }
+    return new Promise(resolve => {
+      this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/signup", data).subscribe(response=> {
+        resolve(response);
+      });
     });
   }
 
   logout() {
     this.authStatusListener.next(false);
     this.clearAuthData();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 
   private saveAuthData(token: string) {

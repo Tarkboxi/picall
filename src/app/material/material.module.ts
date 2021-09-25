@@ -12,11 +12,12 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 
 
-const MaterialComponents = [MatButtonModule, MatIconModule, MatFormFieldModule, MatCardModule, MatInputModule, MatToolbarModule, MatMenuModule, MatCheckboxModule, MatSnackBarModule, MatExpansionModule, MatDialogModule, MatTabsModule, MatProgressSpinnerModule];
+const MaterialComponents = [MatButtonModule, MatIconModule, MatFormFieldModule, MatCardModule, MatInputModule, MatToolbarModule, MatMenuModule, MatCheckboxModule, MatSnackBarModule, MatExpansionModule, MatDialogModule, MatTabsModule, MatProgressSpinnerModule, MatPaginatorModule];
 
 @NgModule({
   imports: [

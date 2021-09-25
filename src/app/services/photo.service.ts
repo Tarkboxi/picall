@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, Subject } from 'rxjs';
+import { forkJoin, of, Subject } from 'rxjs';
 import { PhotoDisplayer } from '../models/photo-displayer.model';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { concat } from 'lodash-es';
 import { forEach } from 'lodash-es';
 import { difference } from 'lodash-es';
@@ -16,7 +16,7 @@ import * as fileSaver from 'file-saver';
   providedIn: 'root'
 })
 export class PhotoService {
-  private photoDisplay: PhotoDisplayer = {photos: [], total: 0};
+  private photoDisplay: PhotoDisplayer = {photos: [], total: 0, count: 10, page: 1};
   private photosUpdated = new Subject<PhotoDisplayer>();
 
   constructor(private httpClient: HttpClient) {
@@ -32,25 +32,25 @@ export class PhotoService {
       let postData = new FormData();
       postData.append("photo", photo);
       let upload = this.httpClient.post<any>('http://localhost:3000/api/photos', postData)
-      .pipe( map(data => {
-        return { photos: data.photos.map(photo => {
-          return {
+      .pipe(
+        map(data => {
+          return { photos: data.photos.map(photo => {
+            return {
             url: photo.url,
-            id: photo._id,
-            creator: photo.creator
+              id: photo._id,
+              creator: photo.creator
+            };
+          }),
+          additions: data.total
           };
-        }),
-        additions: data.total
-        };
-      }))
+        })
+      )
       uploads.push(upload);
     });
     forkJoin(uploads).subscribe((forkedResponse)=> {
       forEach(forkedResponse, (mappedData) => {
-        console.log(mappedData);
         this.photoDisplay.photos = concat(this.photoDisplay.photos, mappedData.photos);
       });
-      console.log(this.photoDisplay.photos);
       this.photoDisplay.total += forkedResponse.length;
       this.photosUpdated.next(this.photoDisplay);
     });

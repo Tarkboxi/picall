@@ -4,3 +4,10 @@
 .no-margin-bottom {
   margin-bottom: 0 !important;
 }
+.fill-width {
+  width: 100%;
+}
+.fixed-bottom-float {
+  position: fixed;
+  bottom: 8px;
+}

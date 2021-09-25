@@ -1,6 +1,6 @@
 <mat-toolbar color = "primary" fxLayout="row" fxLayoutAlign="space-between center" class="app-header-height">
 
-  <div>
+  <div fxFlex="120px">
     <mat-spinner color="accent" diameter = "50" *ngIf="loading"></mat-spinner>
   </div>
 
@@ -8,7 +8,7 @@
     <span class="mat-display-3 no-margin-bottom">PicAll</span>
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
+  <div fxFlex="120px" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
     <app-photo-uploader></app-photo-uploader>
 
     <button mat-fab [matMenuTriggerFor]="menu">

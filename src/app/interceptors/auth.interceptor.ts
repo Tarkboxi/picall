@@ -4,11 +4,12 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpResponse
+  HttpResponse,
+  HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { NotificationService } from '../services/notification.service';
 
 @Injectable()
@@ -28,7 +29,12 @@ export class AuthInterceptor implements HttpInterceptor {
         this.notificationService.setLoading(false);
       }
       return event;
-    }));
+    }), catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    return throwError(error);
   }
 
 }

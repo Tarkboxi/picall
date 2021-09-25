@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PhotoDisplayer } from 'src/app/models/photo-displayer.model';
 import { PhotoService } from 'src/app/services/photo.service';
+import {PageEvent} from '@angular/material/paginator';
 import { pull } from 'lodash-es';
 import { pullAll } from 'lodash-es';
 import { includes } from 'lodash-es';
@@ -13,20 +14,17 @@ import { filter } from 'lodash-es';
   styleUrls: ['./photo-grid.component.scss']
 })
 export class PhotoGridComponent implements OnInit {
-  count: number;
-  page: number;
   photosSubscription: Subscription;
   photoDisplayer: PhotoDisplayer;
-  public selectedPhotos: string[];
+  selectedPhotos: string[];
+  pageEvent: PageEvent;
 
   constructor(private photoService: PhotoService) {
-    this.count = 10;
-    this.page = 1;
     this.selectedPhotos = [];
   }
 
   ngOnInit(): void {
-    this.photoService.getPhotos(this.count, this.page);
+    this.photoService.getPhotos(10, 1);
 
     this.photosSubscription = this.photoService.PhotoUpdateListener.subscribe((data => {
       this.photoDisplayer = data;
