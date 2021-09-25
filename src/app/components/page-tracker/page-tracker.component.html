@@ -1,0 +1,7 @@
+<div fxLayout = "row" fxLayoutAlign="center center">
+  <mat-paginator [length]="photoDisplayer.total"
+                 [pageSize]="photoDisplayer.count"
+                 (page)="pageEvent = getPhotos($event)"
+                 aria-label="Select page">
+  </mat-paginator>
+</div>

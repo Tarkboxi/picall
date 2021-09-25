@@ -1,28 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PhotoDisplayer } from 'src/app/models/photo-displayer.model';
-import { PhotoService } from 'src/app/services/photo.service';
 import {PageEvent} from '@angular/material/paginator';
-import { pullAll } from 'lodash-es';
-import { includes } from 'lodash-es';
-import { filter } from 'lodash-es';
-import { AuthService } from 'src/app/services/auth.service';
+import { PhotoService } from 'src/app/services/photo.service';
 
 @Component({
-  selector: 'app-photo-grid',
-  templateUrl: './photo-grid.component.html',
-  styleUrls: ['./photo-grid.component.scss']
+  selector: 'app-page-tracker',
+  templateUrl: './page-tracker.component.html',
+  styleUrls: ['./page-tracker.component.scss']
 })
-export class PhotoGridComponent implements OnInit {
+export class PageTrackerComponent implements OnInit {
   photosSubscription: Subscription;
   photoDisplayer: PhotoDisplayer;
+  pageEvent: PageEvent;
 
-  constructor(private photoService: PhotoService, private authService: AuthService) {
-  }
+  constructor(private photoService: PhotoService) { }
 
   ngOnInit(): void {
-    this.photoService.getPhotos(1);
-
     this.photosSubscription = this.photoService.PhotoUpdateListener.subscribe((data => {
       this.photoDisplayer = data;
     }));
@@ -30,6 +24,11 @@ export class PhotoGridComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.photosSubscription.unsubscribe();
+  }
+
+  getPhotos(event) {
+    this.photoService.getPhotos(event.pageIndex+1);
+    return event;
   }
 
 }

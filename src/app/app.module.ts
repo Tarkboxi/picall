@@ -24,6 +24,7 @@ import { PhotoViewerComponent } from './components/photo/photo-viewer/photo-view
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageTrackerComponent } from './components/page-tracker/page-tracker.component';
+import { PhotoControlComponent } from './components/photo-control/photo-control.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { PageTrackerComponent } from './components/page-tracker/page-tracker.com
     SignupComponent,
     LoginComponent,
     PageTrackerComponent,
+    PhotoControlComponent,
   ],
   entryComponents: [PhotoViewerComponent],
   imports: [
