@@ -29,12 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
         this.notificationService.setLoading(false);
       }
       return event;
-    }), catchError(this.handleError)
-    );
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    return throwError(error);
+    }));
   }
 
 }

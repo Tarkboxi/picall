@@ -57,7 +57,7 @@ export class PhotoService {
   }
 
   getPhotos(count: number, page: number) {
-    const queryParams = `?pagesize=${count}&page=${page}`;
+    const queryParams = `?count=${count}&page=${page}`;
     this.httpClient.get<any>("http://localhost:3000/api/photos" + queryParams)
     .pipe( map(data => {
       return { photos: data.photos.map(photo => {

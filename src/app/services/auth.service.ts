@@ -31,6 +31,7 @@ export class AuthService {
     return new Promise(resolve => {
       this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/signup", data).subscribe(response=> {
         resolve(response);
+      }, error => {
       });
     });
   }
@@ -56,7 +57,7 @@ export class AuthService {
   }
 
   getAuthStatus() {
-    return isNull(localStorage.getItem('token'));
+    return !isNull(localStorage.getItem('token'));
   }
 
   getToken() {
