@@ -17,26 +17,27 @@
 
   </div>
 
-  <mat-card *ngIf="selectedPhotos.length > 0" color="primary" class="mat-elevation-z2 fixed-bottom-float">
-
-    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
-      <span>{{selectedPhotos.length}} Photos selected</span>
-      <button mat-fab (click) = "delete()">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-
-  </mat-card>
-
   <div class="fixed-bottom-float fill-width">
     <div fxLayout = "row" fxLayoutAlign="center center">
       <mat-paginator [length]="photoDisplayer.total"
                      [pageSize]="photoDisplayer.count"
                      (page)="pageEvent = $event"
-                     aria-label="Select page"
-                     >
+                     aria-label="Select page">
       </mat-paginator>
     </div>
+  </div>
+
+  <div class="fixed-bottom-float">
+    <mat-card *ngIf="selectedPhotos.length > 0" color="primary" class="mat-elevation-z2">
+
+      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
+        <span>{{selectedPhotos.length}} Photos selected</span>
+        <button mat-fab (click) = "delete()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+    </mat-card>
   </div>
 
 </div>
