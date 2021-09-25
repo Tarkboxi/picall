@@ -7,3 +7,11 @@
   max-height: 90%;
   object-fit: contain;
 }
+.photo-loader {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {width: 30px;height: 30px;}
