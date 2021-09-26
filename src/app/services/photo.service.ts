@@ -1,19 +1,18 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, of, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject, zip } from 'rxjs';
 import { PhotoDisplayer } from '../models/photo-displayer.model';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { concat } from 'lodash-es';
 import { forEach } from 'lodash-es';
-import { difference } from 'lodash-es';
 import { includes } from 'lodash-es';
 import { filter } from 'lodash-es';
 import { map as _map } from 'lodash-es'
 import { take } from 'lodash-es'
-
 import * as fileSaver from 'file-saver';
-import { ThrowStmt } from '@angular/compiler';
 import { Photo } from '../models/Photo.model';
+import { NotificationService } from './notification.service';
+import { MessagingService } from './messaging.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +22,17 @@ export class PhotoService {
   private photosUpdated = new BehaviorSubject<PhotoDisplayer>(this.photoDisplay);
   private selectedPhotosListener = new Subject<Photo[]>();
   private selectedPhotos: Photo[] = [];
+  private updatePageNumber = new Subject<number>();
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private notificationService: NotificationService, private messagingService: MessagingService) {
   }
 
   get PhotoUpdateListener() {
     return this.photosUpdated.asObservable();
+  }
+
+  get updatePageNumberListener() {
+    return this.updatePageNumber.asObservable();
   }
 
   get SelectedPhotoListener() {
@@ -45,25 +49,44 @@ export class PhotoService {
         map(data => {
           return { photos: data.photos.map(photo => {
             return {
-            url: photo.url,
+              url: photo.url,
               id: photo._id,
               creator: photo.creator
             };
           }),
           additions: data.total
           };
-        })
+        }),
+        catchError(error => of(error))
       )
       uploads.push(upload);
-    });
-    forkJoin(uploads).subscribe((forkedResponse)=> {
-      forEach(forkedResponse, (mappedData) => {
-        this.photoDisplay.photos = concat(mappedData.photos, this.photoDisplay.photos);
+    })
+    zip(...uploads).subscribe((zippedResponse)=> {
+      let errors = [];
+      forEach(zippedResponse, (mappedData) => {
+        if(mappedData instanceof HttpErrorResponse) {
+          errors.push(mappedData);
+        } else if(this.photoDisplay.page == 1) {
+          this.photoDisplay.photos = concat(mappedData.photos, this.photoDisplay.photos);
+        }
       });
-      this.photoDisplay.photos = take(this.photoDisplay.photos, this.photoDisplay.count);
-      this.photoDisplay.total += forkedResponse.length;
+      if(this.photoDisplay.photos.length > this.photoDisplay.count) {
+        this.photoDisplay.photos = take(this.photoDisplay.photos, this.photoDisplay.count);
+      }
+      let adds = zippedResponse.length - errors.length;
+      this.photoDisplay.total += adds;
+      this.addResultNotification(adds, errors);
       this.photosUpdated.next(this.photoDisplay);
+    }, error => {
+      this.notificationService.notifyUser(error);
     });
+  }
+
+  addResultNotification(adds, errors) {
+    this.notificationService.notifyUser(
+      { success: this.messagingService.addPhotoSuccessMessage(adds),
+        error: this.messagingService.addPhotoFailureMessage(errors)
+      });
   }
 
   getPhotos(page) {
@@ -83,21 +106,27 @@ export class PhotoService {
     .subscribe((mappedData)=> {
       this.photoDisplay.photos = mappedData.photos;
       this.photoDisplay.total = mappedData.total;
+      this.photoDisplay.page = page;
       this.photosUpdated.next(this.photoDisplay);
+      this.updatePageNumber.next(page);
     });
   }
 
   deletePhotos = (selectedPhotos: Photo[]) => {
-    return new Promise(resolve => {
-      this.httpClient.request<any>('delete', "http://localhost:3000/api/photos", { body: selectedPhotos }).subscribe((response)=> {
+    this.httpClient.request<any>('delete', "http://localhost:3000/api/photos", { body: selectedPhotos })
+      .subscribe((response)=> {
         let deletedPhotos = response.photos;
-        this.photoDisplay.photos = filter(this.photoDisplay.photos, (photo) => { return !includes(_map(deletedPhotos, "id"), photo.id)});
-        this.photoDisplay.total -= deletedPhotos.length;
-        this.photosUpdated.next(this.photoDisplay);
         this.deselectPhotos(deletedPhotos);
-        resolve(deletedPhotos);
+        this.getPhotos(this.getPageAfterDelete(response.count));
+      }, error =>{
+
       });
-    });
+  }
+
+  getPageAfterDelete(deleteCount) {
+    let maxPages = Math.ceil((this.photoDisplay.total - deleteCount)/this.photoDisplay.count);
+    let newPage = this.photoDisplay.page > maxPages ? maxPages : this.photoDisplay.page;
+    return newPage;
   }
 
   selectPhotos(photos: Photo[]) {

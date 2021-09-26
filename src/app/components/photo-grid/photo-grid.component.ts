@@ -2,10 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PhotoDisplayer } from 'src/app/models/photo-displayer.model';
 import { PhotoService } from 'src/app/services/photo.service';
-import {PageEvent} from '@angular/material/paginator';
-import { pullAll } from 'lodash-es';
-import { includes } from 'lodash-es';
-import { filter } from 'lodash-es';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
