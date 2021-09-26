@@ -1,10 +1,10 @@
-    <mat-card *ngIf="selectedPhotos.length > 0" color="primary" class="mat-elevation-z2">
+<mat-card *ngIf="selectedPhotos.length > 0" color="primary" class="mat-elevation-z2">
 
-      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
-        <span>{{selectedPhotos.length}} Photos selected</span>
-        <button mat-fab (click) = "delete()">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
+    <span>{{selectedPhotos.length}} Photos selected</span>
+    <button mat-fab (click) = "delete()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
 
-    </mat-card>
+</mat-card>

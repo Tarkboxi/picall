@@ -25,6 +25,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageTrackerComponent } from './components/page-tracker/page-tracker.component';
 import { PhotoControlComponent } from './components/photo-control/photo-control.component';
+import { NotifyUserComponent } from './components/notify-user/notify-user.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { PhotoControlComponent } from './components/photo-control/photo-control.
     LoginComponent,
     PageTrackerComponent,
     PhotoControlComponent,
+    NotifyUserComponent,
   ],
   entryComponents: [PhotoViewerComponent],
   imports: [
