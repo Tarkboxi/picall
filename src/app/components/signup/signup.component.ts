@@ -1,8 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessagingService } from 'src/app/services/messaging.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { passwordMatchValidator } from 'src/app/validators/password-match';
+import { FormTabService } from '../auth/tab-track/form-tab.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,8 +15,9 @@ import { passwordMatchValidator } from 'src/app/validators/password-match';
 export class SignupComponent implements OnInit {
   form: FormGroup;
   @Input() authTabGroup: any;
+  submitError: string;
 
-  constructor(private readonly formBuiler: FormBuilder, private authService: AuthService, private messagingService: MessagingService) {
+  constructor(private readonly formBuiler: FormBuilder, private authService: AuthService, private messagingService: MessagingService, private router: Router, private tabService: FormTabService, private notificationService: NotificationService) {
     this.form = this.formBuiler.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(4)]],
@@ -27,11 +31,17 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async signUp(form, formDirective) {
-    await this.authService.signUp(form.value);
-    formDirective.resetForm();
-    form.reset();
-    this.authTabGroup.selectedIndex = 0;
+  async signUp(form) {
+    let signupResult: any = await this.authService.signUp(form.value);
+    let email = form.value.email;
+    if(signupResult.status != 201) {
+      this.form.setErrors({'failedSignup': true});
+      this.submitError = signupResult.error.message;
+    } else {
+      this.router.navigate(['/auth/login'],{state: {email: email}});
+      this.tabService.changeTab(0);
+      this.notificationService.notifyUser({error:[], success:[this.messagingService.signupSuccessMessage()]});
+    }
   }
 
   emailErrorMessage() {

@@ -9,6 +9,10 @@ export class MessagingService {
 
   constructor() { }
 
+  signupSuccessMessage() {
+    return "Successfully created account. Use your password to login.";
+  }
+
   emailFormValidationError() {
     return "Invalid email.";
   }
@@ -21,15 +25,22 @@ export class MessagingService {
     return "Passwords don't match.";
   }
 
-  addPhotoSuccessMessage(count) {
-    return ["Successfully added: "+count+" photos."];
+  userLogoutMessage() {
+    return "Logged out.";
   }
 
-  addPhotoFailureMessage(error: HttpErrorResponse[]) {
+  addPhotoSuccessMessage(count) {
+    if(count > 0) {
+      return ["Successfully added: "+count+" photos."];
+    }
+    return[];
+  }
+
+  addPhotoFailureMessage(httpError: HttpErrorResponse[]) {
     let errors = [];
-    if(!isEmpty(error)) {
-      errors.push("Failed to add: "+error.length+" photos.");
-      errors.push("Reason: "+error[0]);
+    if(!isEmpty(httpError)) {
+      errors.push("Failed to add: "+httpError.length+" photos.");
+      errors.push("Reason: "+httpError[0].error.message);
     }
     return errors;
   }

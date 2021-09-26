@@ -9,7 +9,7 @@ import { UserNotification } from '../models/UserNotification.model';
 })
 export class NotificationService {
   private loading = new Subject<boolean>();
-  notifyDuration = 5;
+  notifyDuration = 3;
 
   constructor(private _snackBar: MatSnackBar) { }
 
@@ -21,9 +21,12 @@ export class NotificationService {
     return this.loading.asObservable();
   }
 
-  notifyUser(notification: UserNotification) {
+  notifyUser(notificationMessages: UserNotification) {
     this._snackBar.openFromComponent(NotifyUserComponent, {
       duration: this.notifyDuration * 1000,
+      data: notificationMessages,
+      horizontalPosition: "right",
+      verticalPosition: "bottom",
     });
   }
 }

@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="mat-elevation-z0">
   <form [formGroup]="form" (ngSubmit)="login()" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="30px">
     <mat-form-field>
       <input matInput type="email" [formControlName]="'email'" placeholder="email ID">
@@ -8,6 +8,7 @@
       <input matInput type="password" [formControlName]="'password'" placeholder="Password">
       <mat-error>{{passwordErrorMessage()}}</mat-error>
     </mat-form-field>
+    <mat-error *ngIf="form.hasError('failedLogin')"> {{submitError}} </mat-error>
     <button mat-raised-button color="primary" [disabled] = "!form.valid">Login</button>
   </form>
 </mat-card>

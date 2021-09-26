@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
@@ -10,8 +11,9 @@ import { MessagingService } from 'src/app/services/messaging.service';
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
+  submitError: string;
 
-  constructor(private readonly formBuiler: FormBuilder, private authService: AuthService, private messagingService: MessagingService) {
+  constructor(private readonly formBuiler: FormBuilder, private authService: AuthService, private messagingService: MessagingService, private location: Location) {
     this.form = this.formBuiler.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(4)]]
@@ -19,6 +21,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let initEmail = this.location.getState()['email'];
+    if(initEmail) {
+      this.form.controls.email.setValue(initEmail);
+    }
   }
 
   emailErrorMessage() {
@@ -29,7 +35,11 @@ export class LoginComponent implements OnInit {
     return this.messagingService.passwordFormValidationError();
   }
 
-  login() {
-    this.authService.login(this.form.value);
+  async login() {
+    let loginResult: any = await this.authService.login(this.form.value);
+    if(loginResult.status != 200) {
+      this.form.setErrors({'failedLogin': true});
+      this.submitError = loginResult.error.message;
+    }
   }
 }

@@ -5,11 +5,10 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpResponse,
-  HttpErrorResponse
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { NotificationService } from '../services/notification.service';
 
 @Injectable()
@@ -21,7 +20,7 @@ export class AuthInterceptor implements HttpInterceptor {
     this.notificationService.setLoading(true);
     const authToken = this.authService.getToken();
     const authRequest = request.clone({
-      headers: request.headers.set('Authorization', authToken)
+      headers: request.headers.set('Authorization', "Bearer " + authToken)
     });
     return next.handle(authRequest)
     .pipe(map<HttpEvent<any>, any>((event: HttpEvent<any>) => {

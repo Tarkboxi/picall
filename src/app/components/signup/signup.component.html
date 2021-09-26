@@ -1,5 +1,5 @@
-<mat-card>
-  <form [formGroup]="form" #formDirective="ngForm" (ngSubmit)="signUp(form, formDirective)" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+<mat-card class="mat-elevation-z0">
+  <form [formGroup]="form" (ngSubmit)="signUp(form)" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="30px">
     <mat-form-field>
       <input matInput type="email" [formControlName]="'email'" placeholder="email ID">
       <mat-error>{{emailErrorMessage()}}</mat-error>
@@ -13,6 +13,7 @@
       <mat-error> {{passwordErrorMessage()}} </mat-error>
     </mat-form-field>
     <mat-error *ngIf="form.hasError('mismatch')"> {{rePasswordErrorMessage()}} </mat-error>
+    <mat-error *ngIf="form.hasError('failedSignup')"> {{submitError}} </mat-error>
     <button mat-raised-button color="primary" [disabled] = "!form.valid">Sign up</button>
   </form>
 </mat-card>
