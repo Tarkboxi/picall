@@ -17,39 +17,52 @@ export class AuthService {
   }
 
   login(data: Auth) {
-    this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/login", data).subscribe(response=> {
-      const token = response.token;
-      if(token) {
-        this.saveAuthData(token);
-        this.authStatusListener.next(true);
-        this.router.navigate(['/home']);
-      }
+    return new Promise(resolve => {
+      this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/login", data, { observe: 'response'}).subscribe(response=> {
+        const token = response.body.token;
+        if(token) {
+          this.saveAuthData(token);
+          this.authStatusListener.next(true);
+          this.router.navigate(['/home']);
+        }
+        resolve(response);
+      }, httpError => {
+        resolve(httpError);
+      });
     });
   }
 
   signUp(data: Auth) {
     return new Promise(resolve => {
-      this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/signup", data).subscribe(response=> {
+      this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/signup", data, { observe: 'response'}).subscribe(response=> {
         resolve(response);
-      }, error => {
+      }, httpErrror => {
+        resolve(httpErrror);
       });
     });
   }
 
-  logout() {
+  logout(message) {
     this.authStatusListener.next(false);
     this.clearAuthData();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth']);
   }
 
   private saveAuthData(token: string) {
-    localStorage.setItem('userId', this.jwtHelperService.decodeToken(token).userId);
+    const decoded = this.jwtHelperService.decodeToken(token);
+    localStorage.setItem('expiresIn', decoded.exp);
+    localStorage.setItem('userId', decoded.userId);
     localStorage.setItem('token', token);
   }
 
   private clearAuthData() {
     localStorage.removeItem('userId');
     localStorage.removeItem('token');
+    localStorage.removeItem('expiresIn');
+  }
+
+  isExpired() {
+    return (new Date() > new Date(Number(localStorage.getItem('expiresIn')) * 1000));
   }
 
   get AuthStatusObservable() {

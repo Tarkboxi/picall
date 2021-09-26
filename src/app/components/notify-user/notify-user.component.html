@@ -1,0 +1,14 @@
+<div *ngIf="data.success.length > 0">
+  <div>
+    <div *ngFor="let successMessage of data.success">
+      {{successMessage}}
+    </div>
+  </div>
+</div>
+<div *ngIf="data.error.length > 0">
+  <div>
+    <div *ngFor="let errorMessage of data.error">
+      {{errorMessage}}
+    </div>
+  </div>
+</div>

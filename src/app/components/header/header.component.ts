@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { MessagingService } from 'src/app/services/messaging.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class HeaderComponent implements OnInit {
   loaderSubscription: Subscription;
   loading: boolean = false;
 
-  constructor(private authService: AuthService, private notificationService: NotificationService) { }
+  constructor(private authService: AuthService, private notificationService: NotificationService, private messageService: MessagingService) { }
 
   ngOnInit(): void {
 
@@ -24,7 +25,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.logout(this.messageService.userLogoutMessage());
   }
 
   ngOnDestroy() {
