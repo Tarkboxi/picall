@@ -7,9 +7,9 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/auth//auth.service';
 import { map } from 'rxjs/operators';
-import { NotificationService } from '../services/notification.service';
+import { NotificationService } from '../services/notification/notification.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
