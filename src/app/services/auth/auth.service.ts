@@ -5,6 +5,8 @@ import { Subject } from 'rxjs';
 import { Auth } from 'src/app/models/Auth.model';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import * as _ from '../../../utils/lodash-bundles';
+import { environment } from 'src/environments/environment';
+const BACKEND_URL = environment.apiUrl+'/users/';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,7 @@ export class AuthService {
 
   login(data: Auth) {
     return new Promise(resolve => {
-      this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/login", data, { observe: 'response'}).subscribe(response=> {
+      this.http.post<{token: string; exp: number}>(BACKEND_URL+'/login', data, { observe: 'response'}).subscribe(response=> {
         const token = response.body.token;
         if(token) {
           this.saveAuthData(token);
@@ -33,7 +35,7 @@ export class AuthService {
 
   signUp(data: Auth) {
     return new Promise(resolve => {
-      this.http.post<{token: string; exp: number}>("http://localhost:3000/api/users/signup", data, { observe: 'response'}).subscribe(response=> {
+      this.http.post<{token: string; exp: number}>(BACKEND_URL+'signup', data, { observe: 'response'}).subscribe(response=> {
         resolve(response);
       }, httpErrror => {
         resolve(httpErrror);

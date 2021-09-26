@@ -19,7 +19,7 @@ export class MessagingService {
   }
 
   passwordFormValidationError() {
-    return "Should be between 8-16 characters";
+    return "Should be between 4-12 characters";
   }
 
   passwordMatchFormValidationError() {

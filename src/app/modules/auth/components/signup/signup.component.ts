@@ -20,8 +20,8 @@ export class SignupComponent implements OnInit {
   constructor(private readonly formBuiler: FormBuilder, private authService: AuthService, private messagingService: MessagingService, private router: Router, private tabService: FormTabService, private notificationService: NotificationService) {
     this.form = this.formBuiler.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(4)]],
-      rePassword: ['', [Validators.required, Validators.minLength(4)]]
+      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]],
+      rePassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]]
     }, {
       validators: [passwordMatchValidator],
       updateOn: 'change'

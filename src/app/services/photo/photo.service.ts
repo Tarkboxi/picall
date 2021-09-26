@@ -9,6 +9,8 @@ import { MessagingService } from '../messaging/messaging.service';
 import { ResponseHandlerService } from '../response-handler/response-handler.service';
 import * as _ from '../../../utils/lodash-bundles';
 import * as fileSaver from 'file-saver-es';
+import { environment } from '../../../environments/environment';
+const BACKEND_URL = environment.apiUrl+"/photos/";
 
 @Injectable({
   providedIn: 'root'
@@ -64,7 +66,7 @@ export class PhotoService {
   getPhotos(page) {
     return new Promise(resolve => {
       const queryParams = `?count=${this.photoDisplay.count}&page=${page}`;
-      this.httpClient.get<any>("http://localhost:3000/api/photos" + queryParams, { observe: 'response'})
+      this.httpClient.get<any>(BACKEND_URL + queryParams, { observe: 'response'})
       .subscribe((httpResponse)=> {
         let data = httpResponse.body;
         let mappedPhotos: Photo[] = this.mapPhotoFromDB(data.photos);
@@ -81,7 +83,7 @@ export class PhotoService {
   }
 
   deletePhotos = (selectedPhotos: Photo[]) => {
-    this.httpClient.request<any>('delete', "http://localhost:3000/api/photos", { body: selectedPhotos })
+    this.httpClient.request<any>('delete', BACKEND_URL, { body: selectedPhotos })
       .subscribe((response)=> {
         let deletedPhotos = response.photos;
         this.deselectPhotos(deletedPhotos);
@@ -139,7 +141,7 @@ export class PhotoService {
     _.forEach(items, (item) => {
       let postData = new FormData();
       postData.append(key, item);
-      let observable = this.httpClient.post<any>('http://localhost:3000/api/photos', postData, { observe: 'response'})
+      let observable = this.httpClient.post<any>(BACKEND_URL, postData, { observe: 'response'})
       .pipe( catchError(error => of(error)));
       observables.push(observable);
     });
