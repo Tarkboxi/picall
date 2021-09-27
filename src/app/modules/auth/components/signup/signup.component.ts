@@ -36,7 +36,7 @@ export class SignupComponent implements OnInit {
     let signupResult: any = await this.authService.signUp(form.value);
     if(signupResult.status != 201) {
       this.form.setErrors({'failedSignup': true});
-      this.submitError = signupResult.error.message;
+      this.submitError = signupResult.error.errors[0].title;
     } else {
       this.router.navigate(['/auth/login'],{state: {email: email}});
       this.tabService.changeTab(0);
@@ -45,15 +45,15 @@ export class SignupComponent implements OnInit {
   }
 
   emailErrorMessage() {
-    return this.messagingService.emailFormValidationError();
+    return this.messagingService.formEmailValidationError();
   }
 
   passwordErrorMessage() {
-    return this.messagingService.passwordFormValidationError();
+    return this.messagingService.formPasswordValidationError();
   }
 
   rePasswordErrorMessage() {
-    return this.messagingService.passwordMatchFormValidationError();
+    return this.messagingService.formPasswordMismatchError();
   }
 
 }

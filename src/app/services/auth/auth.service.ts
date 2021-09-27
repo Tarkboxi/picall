@@ -19,8 +19,8 @@ export class AuthService {
 
   login(data: Auth) {
     return new Promise(resolve => {
-      this.http.post<{token: string; exp: number}>(BACKEND_URL+'/login', data, { observe: 'response'}).subscribe(response=> {
-        const token = response.body.token;
+      this.http.post<{data: {token: string; exp: number}}>(BACKEND_URL+'/login', data, { observe: 'response'}).subscribe(response=> {
+        const token = response.body.data.token;
         if(token) {
           this.saveAuthData(token);
           this.authStatusListener.next(true);

@@ -28,18 +28,18 @@ export class LoginComponent implements OnInit {
   }
 
   emailErrorMessage() {
-    return this.messagingService.emailFormValidationError();
+    return this.messagingService.formEmailValidationError();
   }
 
   passwordErrorMessage() {
-    return this.messagingService.passwordFormValidationError();
+    return this.messagingService.formPasswordValidationError();
   }
 
   async login() {
     let loginResult: any = await this.authService.login(this.form.value);
     if(loginResult.status != 200) {
       this.form.setErrors({'failedLogin': true});
-      this.submitError = loginResult.error.message;
+      this.submitError = loginResult.error.errors[0].title;
     }
   }
 }
