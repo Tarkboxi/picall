@@ -109,7 +109,14 @@ export class PhotoService {
   }
 
   downloadPhoto(url) {
-    fileSaver.saveAs(url, url.split('/').pop());
+    fileSaver.saveAs(url, this.getFileName(url));
+  }
+
+  getFileName(url) {
+    let nameWithTimeStamp = url.split("/").pop();
+    let brokenName = nameWithTimeStamp.split("-");
+    brokenName.pop();
+    return brokenName.join("");
   }
 
   mapPhotoFromDB(photos) {

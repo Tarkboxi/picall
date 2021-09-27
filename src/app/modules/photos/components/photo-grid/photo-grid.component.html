@@ -15,12 +15,14 @@
     </div>
   </div>
 
-  <div class="fixed-bottom-float fill-width">
-    <app-page-tracker></app-page-tracker>
-  </div>
+  <div fxLayout="row">
+    <div class="fixed-bottom-float fill-width">
+      <app-page-tracker></app-page-tracker>
+    </div>
 
-  <div class="fixed-bottom-float">
-    <app-photo-control></app-photo-control>
+    <div [ngClass.gt-xs]="'fixed-bottom-float'" [ngClass.xs]="'fixed-top-float'">
+      <app-photo-control></app-photo-control>
+    </div>
   </div>
 
 </div>
