@@ -17,7 +17,7 @@ const BACKEND_URL = environment.apiUrl+"/photos/";
   providedIn: 'root'
 })
 export class PhotoService {
-  private photoDisplay: PhotoDisplayer = {photos: [], total: 0, count: 5, page: 1};
+  private photoDisplay: PhotoDisplayer = Object.assign({photos: [], total: 0, count: 20, page: 1});
   private photosUpdated = new BehaviorSubject<PhotoDisplayer>(this.photoDisplay);
   private selectedPhotosListener = new Subject<Photo[]>();
   private selectedPhotos: Photo[] = [];
@@ -43,22 +43,15 @@ export class PhotoService {
     zip(...uploads).subscribe((zippedResponse)=> {
       let errors = [];
       let addedPhotos = [];
-      _.forEach(zippedResponse, (eachResponse) => {
-        if(eachResponse.status == 201) {
-          addedPhotos.push(eachResponse.body.photos[0]);
+      _.forEach(zippedResponse, (response) => {
+        if(response.status == 201) {
+          addedPhotos.push(response.body.data[0]);
         } else {
-          errors.push(eachResponse);
+          errors.push(response);
         }
       });
-      if(this.photoDisplay.page == 1) {
-        this.photoDisplay.photos = _.concat(this.mapPhotoFromDB(addedPhotos), this.photoDisplay.photos);
-      }
-      if(this.photoDisplay.photos.length > this.photoDisplay.count) {
-        this.photoDisplay.photos = _.take(this.photoDisplay.photos, this.photoDisplay.count);
-      }
-      this.photoDisplay.total += addedPhotos.length;
-      this.photosUpdated.next(this.photoDisplay);
       this.addResultNotification(addedPhotos.length, errors);
+      this.getPhotos(this.photoDisplay.page);
     }, error => {
       this.responseHandler.handleErrorByStatus(error);
     });
@@ -68,15 +61,15 @@ export class PhotoService {
     return new Promise(resolve => {
       const queryParams = `?count=${this.photoDisplay.count}&page=${page}`;
       this.httpClient.get<any>(BACKEND_URL + queryParams, { observe: 'response'})
-      .subscribe((httpResponse)=> {
-        let data = httpResponse.body;
-        let mappedPhotos: Photo[] = this.mapPhotoFromDB(data.photos);
+      .subscribe((response)=> {
+        let data = response.body.data;
+        let mappedPhotos: Photo[] = this.mapPhotoFromDB(data);
         this.photoDisplay.photos = mappedPhotos;
-        this.photoDisplay.total = data.total;
+        this.photoDisplay.total = response.body.total;
         this.photoDisplay.page = page;
         this.photosUpdated.next(this.photoDisplay);
         this.updatePageNumber.next(page);
-        this.responseHandler.handleResponseByStatus(httpResponse);
+        this.responseHandler.handleResponseByStatus(response, this.messagingService.photoFetchSuccess());
       }, error => {
         this.responseHandler.handleErrorByStatus(error);
       });
@@ -84,11 +77,12 @@ export class PhotoService {
   }
 
   deletePhotos = (selectedPhotos: Photo[]) => {
-    this.httpClient.request<any>('delete', BACKEND_URL, { body: selectedPhotos })
+    this.httpClient.request<any>('delete', BACKEND_URL, { body: selectedPhotos, observe: 'response' },)
       .subscribe((response)=> {
-        let deletedPhotos = response.photos;
+        let deletedPhotos = response.body.data;
         this.deselectPhotos(deletedPhotos);
-        this.getPhotos(this.getPageAfterDelete(response.count));
+        this.responseHandler.handleResponseByStatus(response, this.messagingService.photoDeleteSuccess());
+        this.getPhotos(this.getPageAfterDelete(response.body.count));
       }, error => {
         this.responseHandler.handleErrorByStatus(error);
       });
