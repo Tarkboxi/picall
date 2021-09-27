@@ -10,6 +10,7 @@ import { ResponseHandlerService } from '../response-handler/response-handler.ser
 import * as _ from '../../../utils/lodash-bundles';
 import * as fileSaver from 'file-saver-es';
 import { environment } from '../../../environments/environment';
+import { UserNotification } from 'src/app/models/UserNotification.model';
 const BACKEND_URL = environment.apiUrl+"/photos/";
 
 @Injectable({
@@ -117,7 +118,7 @@ export class PhotoService {
     fileSaver.saveAs(url, url.split('/').pop());
   }
 
-  private mapPhotoFromDB(photos) {
+  mapPhotoFromDB(photos) {
     let mappedPhotos: Photo[] = [];
     _.forEach(photos, (photo) => {
       mappedPhotos.push(
@@ -130,10 +131,10 @@ export class PhotoService {
   }
 
   addResultNotification(adds, errors) {
-    this.notificationService.notifyUser(
+    this.notificationService.notifyUserInfo( new UserNotification(
       { success: this.messagingService.addPhotoSuccessMessage(adds),
         error: this.messagingService.addPhotoFailureMessage(errors)
-      });
+      }));
   }
 
   getZippedObservables(items, key) {

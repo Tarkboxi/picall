@@ -7,9 +7,7 @@ import { UserNotification } from 'src/app/models/UserNotification.model';
   styleUrls: ['./notify-user.component.scss']
 })
 export class NotifyUserComponent implements OnInit {
-  notificationData;
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data: UserNotification) {
-    this.notificationData = data;
   }
 
   ngOnInit(): void {

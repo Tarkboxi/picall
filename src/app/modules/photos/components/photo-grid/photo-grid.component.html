@@ -2,12 +2,12 @@
 
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
     <div fxLayout="row wrap" fxLayoutGap="4px grid" fxFlexFill>
-        <div fxFlex.xl="400px"
-            fxFlex.lt-xl="300px"
-            fxFlex.lt-lg="300px"
-            fxFlex.lt-md="250px"
-            fxFlex.lt-sm="100%"
-            *ngFor="let photo of photoDisplayer.photos">
+        <div  *ngFor="let photo of photoDisplayer.photos"
+              fxFlex.xl="20%"
+              fxFlex.lt-xl="20%"
+              fxFlex.lt-lg="25%"
+              fxFlex.lt-md="50%"
+              fxFlex.lt-sm="100%">
           <mat-card class="mat-elevation-z1 photo-card">
             <app-photo [photo]="photo"></app-photo>
           </mat-card>

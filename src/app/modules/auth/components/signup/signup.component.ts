@@ -40,7 +40,7 @@ export class SignupComponent implements OnInit {
     } else {
       this.router.navigate(['/auth/login'],{state: {email: email}});
       this.tabService.changeTab(0);
-      this.notificationService.notifyUser({error:[], success:[this.messagingService.signupSuccessMessage()]});
+      this.notificationService.notifyUserSuccess(this.messagingService.signupSuccessMessage());
     }
   }
 

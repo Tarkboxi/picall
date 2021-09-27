@@ -15,7 +15,7 @@ export class PageTrackerComponent implements OnInit {
   pageEvent: PageEvent;
   pageNumberSubscription: Subscription;
   photosSubscription: Subscription;
-  loadingSubscription: Subscription;
+  loaderSubscription: Subscription;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   disablePageNav = true;
 
@@ -32,7 +32,7 @@ export class PageTrackerComponent implements OnInit {
     }));
 
 
-    this.loadingSubscription = this.notificationService.loadingListener.subscribe((data => {
+    this.loaderSubscription = this.notificationService.loadingListener.subscribe((data => {
       this.disablePageNav = data;
     }));
 
@@ -41,7 +41,7 @@ export class PageTrackerComponent implements OnInit {
   ngOnDestroy(): void {
     this.photosSubscription.unsubscribe();
     this.pageNumberSubscription.unsubscribe();
-    this.loadingSubscription.unsubscribe();
+    this.loaderSubscription.unsubscribe();
   }
 
   getPhotos(event) {

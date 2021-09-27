@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { NotifyUserComponent } from '../../components/notify-user/notify-user.component';
+import { BehaviorSubject } from 'rxjs';
 import { UserNotification } from '../../models/UserNotification.model';
+import { ToastrService } from 'ngx-toastr';
+import * as _ from '../../../utils/lodash-bundles';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class NotificationService {
   private loading = new BehaviorSubject<boolean>(false);
   notifyDuration = 3;
 
-  constructor(private _snackBar: MatSnackBar) { }
+  constructor(private toastrService: ToastrService) { }
 
   setLoading(status) {
     this.loading.next(status);
@@ -21,12 +22,42 @@ export class NotificationService {
     return this.loading.asObservable();
   }
 
-  notifyUser(notificationMessages: UserNotification) {
-    // this._snackBar.openFromComponent(NotifyUserComponent, {
-    //   duration: this.notifyDuration * 1000,
-    //   data: notificationMessages,
-    //   horizontalPosition: "right",
-    //   verticalPosition: "bottom",
-    // });
+  notifyUserSuccess(notificationMessage) {
+    this.toastrService.success(notificationMessage, '',
+    {
+      positionClass: 'toast-bottom-right',
+      timeOut: this.notifyDuration* 1000,
+    });
   }
+
+  notifyUserError(notificationMessage) {
+    this.toastrService.error(notificationMessage, '',
+    {
+      positionClass: 'toast-bottom-right',
+      timeOut: this.notifyDuration* 1000,
+    });
+  }
+
+  notifyUserInfo(notificationMessages: UserNotification) {
+    this.toastrService.info(this.buildInfoTemplate(notificationMessages), '',
+    {
+      positionClass: 'toast-bottom-right',
+      timeOut: (this.notifyDuration+1)* 1000,
+      enableHtml: true
+    });
+  }
+
+  buildInfoTemplate(notificationMessages) {
+    let template = "";
+    _.forEach(notificationMessages.success, function(message) {
+      template += message;
+      template += "<br>";
+    })
+    _.forEach(notificationMessages.error, function(message) {
+      template += message;
+      template += "<br>";
+    })
+    return template;
+  }
+
 }

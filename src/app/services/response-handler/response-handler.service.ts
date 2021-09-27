@@ -13,16 +13,21 @@ export class ResponseHandlerService {
   constructor(private notificationService: NotificationService, public dialog: MatDialog, private authService: AuthService) { }
 
   handle401Error = (errorBody) => {
-    this.notificationService.notifyUser({success: [], error: [errorBody.message.message]});
+    this.notificationService.notifyUserError(errorBody.message.message);
+    this.authService.logout(errorBody.message.message);
+  }
+
+  handle404Error = (errorBody) => {
+    this.notificationService.notifyUserError(errorBody.message.message);
     this.authService.logout(errorBody.message.message);
   }
 
   handle403Error = (errorBody) => {
-    this.notificationService.notifyUser({success: [], error: [errorBody.message]});
+    this.notificationService.notifyUserError(errorBody.message.message);
   }
 
   handle500Error = (errorBody) => {
-    this.notificationService.notifyUser({success: [], error: [errorBody.message]});
+    this.notificationService.notifyUserError(errorBody.message.message);
   }
 
   handleErrorByStatus(httpError: HttpErrorResponse) {
@@ -30,11 +35,11 @@ export class ResponseHandlerService {
   }
 
   handle200Response = (responseBody) => {
-    this.notificationService.notifyUser({success: [responseBody.message], error: []});
+    this.notificationService.notifyUserSuccess(responseBody.message);
   }
 
   handle201Response = (responseBody) => {
-    this.notificationService.notifyUser({success: [responseBody.message], error: []});
+    this.notificationService.notifyUserSuccess(responseBody.message);
   }
 
   handleResponseByStatus(response) {

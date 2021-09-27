@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtHelperService, JWT_OPTIONS  } from '@auth0/angular-jwt';
+import { ToastrModule } from 'ngx-toastr'
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './modules/material.module';
@@ -27,6 +28,7 @@ import { NotifyUserComponent } from './components/notify-user/notify-user.compon
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     HttpClientModule,
     MaterialModule,
     FlexLayoutModule,
