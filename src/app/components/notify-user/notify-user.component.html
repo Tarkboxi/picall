@@ -1,14 +1,16 @@
-<div *ngIf="data.success.length > 0">
-  <div>
-    <div *ngFor="let successMessage of data.success">
-      {{successMessage}}
+<div *ngIf="data">
+  <div *ngIf="data.success.length > 0">
+    <div>
+      <div *ngFor="let successMessage of data.success">
+        {{successMessage}}
+      </div>
     </div>
   </div>
-</div>
-<div *ngIf="data.error.length > 0">
-  <div>
-    <div *ngFor="let errorMessage of data.error">
-      {{errorMessage}}
+  <div *ngIf="data.error.length > 0">
+    <div>
+      <div *ngFor="let errorMessage of data.error">
+        {{errorMessage}}
+      </div>
     </div>
   </div>
 </div>
