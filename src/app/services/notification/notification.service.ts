@@ -22,11 +22,11 @@ export class NotificationService {
   }
 
   notifyUser(notificationMessages: UserNotification) {
-    this._snackBar.openFromComponent(NotifyUserComponent, {
-      duration: this.notifyDuration * 1000,
-      data: notificationMessages,
-      horizontalPosition: "right",
-      verticalPosition: "bottom",
-    });
+    // this._snackBar.openFromComponent(NotifyUserComponent, {
+    //   duration: this.notifyDuration * 1000,
+    //   data: notificationMessages,
+    //   horizontalPosition: "right",
+    //   verticalPosition: "bottom",
+    // });
   }
 }

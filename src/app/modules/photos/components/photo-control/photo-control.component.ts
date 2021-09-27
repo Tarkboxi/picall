@@ -21,6 +21,10 @@ export class PhotoControlComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.selectedPhotosSubscription.unsubscribe();
+  }
+
   async delete() {
     await this.photoService.deletePhotos(this.selectedPhotos);
   }

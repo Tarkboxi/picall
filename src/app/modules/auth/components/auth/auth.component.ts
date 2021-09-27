@@ -25,7 +25,7 @@ export class AuthComponent implements OnInit {
   ];
 
   constructor(private router: Router, tabService: FormTabService) {
-    tabService.tabChangeListener.subscribe(index => {
+    this.tabChangeSubscription = tabService.tabChangeListener.subscribe(index => {
       this.switchTab(index);
     })
   }
@@ -34,6 +34,10 @@ export class AuthComponent implements OnInit {
     this.activeLink = this.authLinks.find(link => {
       return link.route == this.router.url;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.tabChangeSubscription.unsubscribe();
   }
 
   switchTab(index) {
