@@ -1,9 +1,9 @@
-<mat-card-header>
+<mat-card-header class="thumb-check">
   <div mat-card-avatar>
     <mat-checkbox (change)="($event.checked) ? selectPhoto() : deselectPhoto()" *ngIf="userId === photo.creator" [checked] = "selected"></mat-checkbox>
   </div>
 </mat-card-header>
-<mat-card-content>
+<mat-card-content class="photo-thumb-frame no-margin-bottom">
   <mat-card class="photo mat-elevation-z0" (click)="openDialog()">
     <mat-spinner color="primary" *ngIf="loading" class="photo-loader"></mat-spinner>
     <img [src]="photo.url" alt="Failed to Load" (load)="loaded()">
