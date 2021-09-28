@@ -4,31 +4,21 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth//auth.service';
-import { map } from 'rxjs/operators';
-import { NotificationService } from '../services/notification/notification.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private authService: AuthService, private notificationService: NotificationService) {}
+  constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    this.notificationService.setLoading(true);
     const authToken = this.authService.getToken();
     const authRequest = request.clone({
       headers: request.headers.set('Authorization', "Bearer " + authToken)
     });
-    return next.handle(authRequest)
-    .pipe(map<HttpEvent<any>, any>((event: HttpEvent<any>) => {
-      if (event instanceof HttpResponse) {
-        this.notificationService.setLoading(false);
-      }
-      return event;
-    }));
+    return next.handle(authRequest);
   }
 
 }
