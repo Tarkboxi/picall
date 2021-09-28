@@ -26,7 +26,7 @@ export class PhotoComponent implements OnInit {
   }
 
   openDialog() {
-    this.dialog.open(PhotoViewerComponent, { data: this.photo, autoFocus: false, height: "90vh", width: "100vw" } );
+    this.dialog.open(PhotoViewerComponent, { data: this.photo, autoFocus: false, height: "90vh", width: "100vw", minHeight: "500px" } );
   }
 
   loaded() {
