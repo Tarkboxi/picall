@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of, Subject, zip } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { PhotoDisplayer } from '../../models/photo-displayer.model';
-import { catchError } from 'rxjs/operators';
 import { Photo } from '../../models/Photo.model';
 import { NotificationService } from '../notification/notification.service';
 import { MessagingService } from '../messaging/messaging.service';
@@ -10,7 +9,6 @@ import { ResponseHandlerService } from '../response-handler/response-handler.ser
 import * as _ from '../../../utils/lodash-bundles';
 import * as fileSaver from 'file-saver-es';
 import { environment } from '../../../environments/environment';
-import { UserNotification } from 'src/app/models/UserNotification.model';
 const BACKEND_URL = environment.apiUrl+"/photos/";
 
 @Injectable({
@@ -39,18 +37,13 @@ export class PhotoService {
   }
 
   addPhotos(photos) {
-    const uploads = this.getZippedObservables(photos, "photo");
-    zip(...uploads).subscribe((zippedResponse)=> {
-      let errors = [];
-      let addedPhotos = [];
-      _.forEach(zippedResponse, (response) => {
-        if(response.status == 201) {
-          addedPhotos.push(response.body.data[0]);
-        } else {
-          errors.push(response);
-        }
-      });
-      this.addResultNotification(addedPhotos.length, errors);
+    let postData = new FormData();
+    for(let i=0; i<photos.length; i++) {
+      postData.append('photos', photos[i]);
+    }
+    this.httpClient.post<any>(BACKEND_URL, postData, { observe: 'response'})
+    .subscribe((response)=> {
+      this.notificationService.notifyUserInfo(this.messagingService.addPhotoSuccessMessage(photos.length, response.body.data.length));
       this.getPhotos(this.photoDisplay.page);
     }, error => {
       this.responseHandler.handleErrorByStatus(error);
@@ -129,25 +122,6 @@ export class PhotoService {
       );
     });
     return mappedPhotos;
-  }
-
-  addResultNotification(adds, errors) {
-    this.notificationService.notifyUserInfo( new UserNotification(
-      { success: this.messagingService.addPhotoSuccessMessage(adds),
-        error: this.messagingService.addPhotoFailureMessage(errors)
-      }));
-  }
-
-  getZippedObservables(items, key) {
-    let observables = []
-    _.forEach(items, (item) => {
-      let postData = new FormData();
-      postData.append(key, item);
-      let observable = this.httpClient.post<any>(BACKEND_URL, postData, { observe: 'response'})
-      .pipe( catchError(error => of(error)));
-      observables.push(observable);
-    });
-    return observables;
   }
 
 }

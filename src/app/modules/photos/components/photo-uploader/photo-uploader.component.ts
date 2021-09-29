@@ -19,8 +19,10 @@ export class PhotoUploaderComponent {
 
   photoSelected(event: Event) {
     const files = (event.target as HTMLInputElement).files;
-    this.form.patchValue({photos: files});
-    this.photoService.addPhotos(this.form.value.photos);
+    if(files.length > 0) {
+      this.form.patchValue({photos: files});
+      this.photoService.addPhotos(this.form.value.photos);
+    }
   }
 
 }
