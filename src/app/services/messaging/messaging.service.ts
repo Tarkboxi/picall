@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { UserNotification } from 'src/app/models/UserNotification.model';
 import * as _ from '../../../utils/lodash-bundles';
 
 
@@ -42,19 +43,17 @@ export class MessagingService {
     return "Successfully Deleted Photos";
   }
 
-  addPhotoSuccessMessage(count) {
-    if(count > 0) {
-      return ["Successfully added: "+count+" photos."];
+  addPhotoSuccessMessage(total, added) {
+    let succeses = [];
+    let errors = [];
+    if(added > 0) {
+      succeses.push("Successfully added: "+added+" photos.");
     }
-    return[];
+    if(total - added > 0) {
+      errors.push("Failed to add: "+(total-added)+" photos.");
+      errors.push("Reason: Invalid image type");
+    }
+    return {error: errors, success: succeses};
   }
 
-  addPhotoFailureMessage(httpErrors: HttpErrorResponse[]) {
-    let errors = [];
-    if(!_.isEmpty(httpErrors)) {
-      errors.push("Failed to add: "+httpErrors.length+" photos.");
-      errors.push("Reason: "+httpErrors[0].error.errors[0].title);
-    }
-    return errors;
-  }
 }
